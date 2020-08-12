@@ -12,8 +12,7 @@ public class PrincipalClass {
     private static final Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-        Tienda tienda = new Tienda();
-        run(tienda);
+        run(new Tienda());
     }
 
     private static void run(Tienda tienda) {

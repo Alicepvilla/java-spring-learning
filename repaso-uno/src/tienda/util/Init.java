@@ -20,21 +20,21 @@ public class Init {
         trabajadores.add(new Trabajador(
                 (long) (trabajadores.size() + 1),
                 "Eduardo Garrido",
-                "15648579",
+                "15648579-5",
                 "+56958964715",
                 vehiculos.get(trabajadores.size())));
 
         trabajadores.add(new Trabajador(
                 (long) (trabajadores.size() + 1),
                 "Lucía Campusano",
-                "18569458",
+                "18569458-K",
                 "+56967849532",
                 vehiculos.get(trabajadores.size())));
 
         trabajadores.add(new Trabajador(
                 (long) (trabajadores.size() + 1),
                 "Cristian González",
-                "13456854",
+                "13456854-7",
                 "+56975486925",
                 vehiculos.get(trabajadores.size())));
 

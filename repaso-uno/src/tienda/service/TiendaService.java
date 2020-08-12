@@ -13,12 +13,14 @@ public class TiendaService {
 
     public static void calcularTotalGanado(Tienda tienda) {
         StringBuilder stringBuilder = new StringBuilder("\nTOTAL GANADO\n");
-        stringBuilder.append(tienda.getRegistros()
+        stringBuilder.append("$" + tienda.getRegistros()
                 .stream()
                 .mapToInt(Pedido::getMonto)
                 .sum());
         stringBuilder.append("\n\n*******************\n");
+        stringBuilder.append("Presiona enter...\n");
         System.out.println(stringBuilder);
+        scanner.nextLine();
     }
 
     public static Pedido addPedido(Tienda tienda) {
