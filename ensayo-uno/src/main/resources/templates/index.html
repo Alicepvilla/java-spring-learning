@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#ciudades-detalles').DataTable();
+            $(function () {
+                $(".widget input[type=submit], .widget a, .widget button").button();
+                $("button, input, a").click(function (event) {
+                    event.preventDefault();
+                });
+            });
+            // $('#test').DataTable({
+            //     "ajax": {
+            //         "url": 'http://localhost:8081/beneficiario/solicitar-ayuda',
+            //         "dataSrc": ''
+            //     },
+            //     "columns": [
+            //         {"data": 'beneficiarioid'},
+            //         {"data": 'nombre'},
+            //         {"data": 'edad'}
+            //     ]
+            // });
+        });
+    </script>
+    <style>
+        #agregar-ayuda {
+            display: flex;
+            flex-flow: column;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+    <title>Simulacro 1</title>
+</head>
+<body>
+<!--<table id="test" class="display">-->
+<!--    <thead>-->
+<!--    <tr>-->
+<!--        <th>ID Beneficiario</th>-->
+<!--        <th>Nombre</th>-->
+<!--        <th>Edad</th>-->
+<!--    </tr>-->
+<!--    </thead>-->
+<!--    <tfoot>-->
+<!--    <tr>-->
+<!--        <th>ID Beneficiario</th>-->
+<!--        <th>Nombre</th>-->
+<!--        <th>Edad</th>-->
+<!--    </tr>-->
+<!--    </tfoot>-->
+<!--</table>-->
+<h1 style="margin: auto">Listado de ciudades y ayudas</h1>
+<table id="ciudades-detalles" class="display">
+    <thead>
+    <tr>
+        <th>Ciudad</th>
+        <th>Tipo de ayuda</th>
+        <th>Monto</th>
+    </tr>
+    </thead>
+    <tbody>
+    <th:block th:each="ciudad : ${ciudadDetalle}">
+        <th:block th:each="detalle : ${ciudad.value}">
+            <tr>
+                <td th:text="${ciudad.key}"></td>
+                <td th:text="${detalle.key}"></td>
+                <td th:text="${detalle.value}"></td>
+            </tr>
+        </th:block>
+    </th:block>
+    </tbody>
+</table>
+<div id="agregar-ayuda">
+    <h1>Agregar ayuda</h1>
+    <form th:action="@{/agregar-ayuda}" th:method="POST" th:object="${beneficiarioDTO}">
+        <label for="beneficiario">Beneficiario:</label>
+        <select id="beneficiario" th:field="*{beneficiarioid}">
+            <th:block th:each="beneficiario : ${beneficiarios}">
+                <option th:value="${beneficiario.beneficiarioid}" th:text="${beneficiario.nombre}"></option>
+            </th:block>
+        </select>
+        <label for="monto">Monto:</label>
+        <input id="monto" type="number" min="0" th:field="*{ayuda.monto}">
+        <label for="motivo">Motivo</label>
+        <input id="motivo" type="text" th:field="*{ayuda.motivo}">
+        <button type="submit">Agregar</button>
+    </form>
+</div>
+</body>
+</html>
