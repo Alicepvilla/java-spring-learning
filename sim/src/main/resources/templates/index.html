@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Simulacro 1</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#ciudades-ayudas').DataTable();
+            $(function () {
+                $(".widget input[type=submit], .widget a, .widget button").button();
+                $("button, input, a").click(function (event) {
+                    event.preventDefault();
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<h1>Listado de ciudades y ayuda</h1>
+<table id="ciudades-ayudas" class="display">
+    <thead>
+    <tr>
+        <th>Ciudad</th>
+        <th>Tipo de ayuda</th>
+        <th>Monto</th>
+    </tr>
+    </thead>
+    <tbody>
+    <th:block th:each="ciudad : ${ciudadesAyudas}">
+        <th:block th:each="ayuda : ${ciudad.value}">
+            <tr>
+                <td th:text="${ciudad.key}"></td>
+                <td th:text="${ayuda.key}"></td>
+                <td th:text="${ayuda.value}"></td>
+            </tr>
+        </th:block>
+    </th:block>
+    </tbody>
+</table>
+<h1>Agregar ayuda</h1>
+<form th:action="@{/ayuda}" th:method="POST" th:object="${agregarAyuda}">
+    <label for="beneficiario">Beneficiario: </label>
+    <select id="beneficiario" th:field="*{beneficiarioid}">
+        <th:block th:each="beneficiario : ${beneficiarios}">
+            <option th:value="${beneficiario.beneficiarioid}" th:text="${beneficiario.nombre}"></option>
+        </th:block>
+    </select>
+    <label for="monto">Monto: </label>
+    <input id="monto" type="number" min="0" th:field="*{ayuda.monto}">
+    <label for="motivo">Motivo: </label>
+    <input id="motivo" th:field="*{ayuda.motivo}" required>
+    <button type="submit">Agregar</button>
+</form>
+</body>
+</html>
