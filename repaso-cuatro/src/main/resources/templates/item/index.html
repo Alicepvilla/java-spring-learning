@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Item</title>
+</head>
+<body>
+<h1>Item Index</h1>
+<form th:action="@{/item/create}" th:method="POST" th:object="${item}">
+    <label for="nombre-producto">Nombre: </label>
+    <input id="nombre-producto" th:field="*{nombre}">
+    <label for="precio">Precio: </label>
+    <input id="precio" type="number" min="0" th:field="*{precio}">
+    <label for="stock">Stock: </label>
+    <input id="stock" type="number" min="0" th:field="*{stock}">
+    <label for="rut-proveedor">Proveedor: </label>
+    <select id="rut-proveedor" th:field="*{proveedor.rut}">
+        <th:block th:each="proveedorLista : ${proveedores}">
+            <option th:value="${proveedorLista.rut}" th:text="${proveedorLista.rut}"></option>
+        </th:block>
+    </select>
+    <button type="submit">Crear</button>
+</form>
+<hr/>
+<a th:href="@{/}">Volver</a>
+<a th:href="@{/item/get-all}">Ver todos</a>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Proveedor</title>
+</head>
+<body>
+<h1>Proveedor Index</h1>
+<form th:action="@{/proveedor/create}" th:method="POST" th:object="${proveedor}">
+    <label for="rut-proveedor">RUT: </label>
+    <input id="rut-proveedor" th:field="*{rut}">
+    <label for="nombre">Nombre: </label>
+    <input id="nombre" th:field="*{nombre}">
+    <label for="comuna">Comuna: </label>
+    <input id="comuna" th:field="*{comuna}">
+    <label for="direccion">Dirección: </label>
+    <input id="direccion" th:field="*{direccion}">
+    <button type="submit">Crear</button>
+</form>
+<a th:href="@{/}">Volver</a>
+</body>
+</html>

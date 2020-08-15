@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Actualizar item</title>
+</head>
+<body>
+<h1>Actualizar item</h1>
+<form th:action="@{/item/update-one}" th:method="POST" th:object="${item}">
+    <input type="hidden" th:field="*{id}" th:value="*{id}">
+    <label for="nombre-producto">Nombre: </label>
+    <input id="nombre-producto" th:field="*{nombre}">
+    <label for="precio">Precio: </label>
+    <input id="precio" type="number" min="0" th:field="*{precio}">
+    <label for="stock">Stock: </label>
+    <input id="stock" type="number" min="0" th:field="*{stock}">
+    <label for="rut-proveedor">Proveedor: </label>
+    <select id="rut-proveedor" th:field="*{proveedor.rut}">
+        <th:block th:each="proveedorLista : ${proveedores}">
+            <th:block th:switch="${proveedorLista.rut}">
+                <option th:case="*{proveedor.rut}" th:value="${proveedorLista.rut}" th:text="${proveedorLista.rut}" selected></option>
+                <option th:case="*" th:value="${proveedorLista.rut}" th:text="${proveedorLista.rut}"></option>
+            </th:block>
+        </th:block>
+    </select>
+    <button type="submit">Actualizar</button>
+</form>
+<a th:href="@{/item/get-all}">Volver</a>
+</body>
+</html>
