@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Faena</title>
+</head>
+<body>
+<h1>Faena Index</h1>
+<form th:action="@{/faena/create/}" th:method="POST" th:object="${ifc}">
+    <label for="titulo">Nombre faena: </label>
+    <input id="titulo" th:field="*{faena.titulo}" required>
+    <label for="comuna">Comuna: </label>
+    <input id="comuna" th:field="*{faena.comuna}" required>
+    <h3>Adherir item</h3>
+    <label for="items">Item: </label>
+    <select id="items" th:field="*{itemId}">
+        <th:block th:each="item : ${items}">
+            <option th:value="${item.id}" th:text="${item.nombre}"></option>
+        </th:block>
+    </select>
+    <label for="cantidad">Cantidad: </label>
+    <input id="cantidad" type="number" min="0" th:field="*{cantidad}">
+    <button type="submit">Agregar</button>
+</form>
+<a th:href="@{/}">Volver</a>
+<br/>
+<a th:href="@{/add-items}">Producir items</a>
+</body>
+</html>

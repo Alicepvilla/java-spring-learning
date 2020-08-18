@@ -6,20 +6,23 @@ import cl.crisgvera.repasocuatro.model.relational.embeddable.DetalleFaenaId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-public class DetalleFaena {
+public class DetalleFaena implements Serializable {
 
     @EmbeddedId
-    private DetalleFaenaId id;
+    private DetalleFaenaId id = new DetalleFaenaId();
 
-    @MapsId(value = "idFaena")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @MapsId("idFaena")
+    @JoinColumn(name = "idFaena")
     @JsonIgnore
     private Item item;
 
-    @MapsId(value = "idProducto")
     @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("codProducto")
+    @JoinColumn(name = "codProducto")
     @JsonIgnore
     private Faena faena;
 
@@ -42,6 +45,7 @@ public class DetalleFaena {
 
     public void setItem(Item item) {
         this.item = item;
+        item.getDetalleFaenas().add(this);
     }
 
     public Faena getFaena() {
@@ -50,6 +54,7 @@ public class DetalleFaena {
 
     public void setFaena(Faena faena) {
         this.faena = faena;
+        faena.getDetalleFaenas().add(this);
     }
 
     public int getCantidad() {

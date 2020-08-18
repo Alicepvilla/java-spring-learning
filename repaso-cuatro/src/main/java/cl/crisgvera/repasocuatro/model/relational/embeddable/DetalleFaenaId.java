@@ -8,13 +8,18 @@ import java.util.Objects;
 @Embeddable
 public class DetalleFaenaId implements Serializable {
 
-    @Column(name = "idfaena")
+    @Column(name = "idFaena")
     private Long idFaena;
 
-    @Column(name = "codproducto")
+    @Column(name = "codProducto")
     private Long idProducto;
 
     public DetalleFaenaId() {}
+
+    public DetalleFaenaId(Long idFaena, Long idProducto) {
+        this.idFaena = idFaena;
+        this.idProducto = idProducto;
+    }
 
     public Long getIdFaena() {
         return idFaena;

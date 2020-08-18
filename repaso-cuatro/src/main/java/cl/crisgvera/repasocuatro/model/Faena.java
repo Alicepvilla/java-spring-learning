@@ -32,6 +32,11 @@ public class Faena {
     public Faena() {
     }
 
+    @PrePersist
+    private void onCreate() {
+        this.fechaInicio = LocalDateTime.now();
+    }
+
     public Long getId() {
         return id;
     }
