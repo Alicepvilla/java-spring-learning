@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#factura-productos').DataTable();
+            $(function () {
+                $(".widget input[type=submit], .widget a, .widget button").button();
+                $("button, input, a").click(function (event) {
+                    event.preventDefault();
+                });
+            });
+        });
+    </script>
+    <style>
+        #factura-info {
+            text-align: left;
+        }
+    </style>
+    <title>Index</title>
+</head>
+<body>
+<h1>Simulación 2</h1>
+<form th:action="@{/details}" th:method="GET">
+    <label for="factura-id">Factura ID:</label>
+    <input id="factura-id" name="factura-id" type="number" min="1">
+    <button type="submit">Obtener</button>
+</form>
+<hr/>
+<th:block th:if="${factura != null}">
+    <h1 th:text="${'Factura N°' + factura.id}"></h1>
+    <table id="factura-info">
+        <tbody>
+        <tr>
+            <th colspan="2">Detalles cliente</th>
+        </tr>
+        <tr>
+            <th>Cliente:</th>
+            <td th:text="${factura.customer}"></td>
+        </tr>
+        <tr>
+            <th>Fecha:</th>
+            <td th:text="${factura.date}"></td>
+        </tr>
+        <tr>
+            <th colspan="2">Detalles productos</th>
+        </tr>
+        <tr>
+            <th>Subtotal:</th>
+            <td th:text="${'$ ' + valoresTotal.get(0)}"></td>
+        </tr>
+        <tr>
+            <th>Impuesto:</th>
+            <td th:text="${'$ ' + valoresTotal.get(1)}"></td>
+        </tr>
+        <tr>
+            <th>Total:</th>
+            <td th:text="${'$ ' + valoresTotal.get(2)}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <hr/>
+    <table id="factura-productos" class="display">
+        <thead>
+        <tr>
+            <th>Producto</th>
+            <th>Precio</th>
+            <th>Cantidad</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="detalleFactura : ${factura.detalleFacturas}">
+            <tr>
+                <td th:text="${detalleFactura.producto.name}"></td>
+                <td th:text="${'$ ' + detalleFactura.producto.value}"></td>
+                <td th:text="${detalleFactura.quantity}"></td>
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
+</th:block>
+</body>
+</html>

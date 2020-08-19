@@ -1,49 +1,26 @@
-INSERT INTO Ciudades VALUES (1,'Santiago');
-INSERT INTO Ciudades VALUES (2,'Viña del Mar');
-INSERT INTO Ciudades VALUES (3,'Concepción');
-INSERT INTO Ciudades VALUES (4,'Rancagua');
-INSERT INTO Ciudades VALUES (5,'Temuco');
-
-INSERT INTO Beneficiarios (beneficiarioid, nombre, edad, ciudadid)
-VALUES (1,'Juan Perez',23,1);
-INSERT INTO Beneficiarios (beneficiarioid, nombre, edad, ciudadid)
-VALUES (2,'Pedro López',30,3);
-INSERT INTO Beneficiarios (beneficiarioid, nombre, edad, ciudadid)
-VALUES (3,'Diego González',18,2);
-INSERT INTO Beneficiarios (beneficiarioid, nombre, edad, ciudadid)
-VALUES (4,'Martín Sánchez',45,1);
-INSERT INTO Beneficiarios (beneficiarioid, nombre, edad, ciudadid)
-VALUES (5,'Samuel Reyes',30,4);
-INSERT INTO Beneficiarios (beneficiarioid, nombre, edad, ciudadid)
-VALUES (6,'Matías Donoso',60,5);
-
-INSERT INTO Ayudas (ayudaid, beneficiarioid, monto, motivo) VALUES
-(1, 3,250000,'Insumos');
-INSERT INTO Ayudas (ayudaid, beneficiarioid, monto, motivo) VALUES
-(2, 2,50000,'Alimentación');
-INSERT INTO Ayudas (ayudaid, beneficiarioid, monto, motivo) VALUES
-(3, 2,40000,'Cuentas');
-INSERT INTO Ayudas (ayudaid, beneficiarioid, monto, motivo) VALUES
-(4, 4,240000,'Alimentación');
-INSERT INTO Ayudas (ayudaid, beneficiarioid, monto, motivo) VALUES
-(5, 1,80000,'Cuentas');
-INSERT INTO Ayudas (ayudaid, beneficiarioid, monto, motivo) VALUES
-(6, 2,150000,'Insumos');
-INSERT INTO Ayudas (ayudaid, beneficiarioid, monto, motivo) VALUES
-(7, 4,100000,'Cuentas');
-INSERT INTO Ayudas (ayudaid, beneficiarioid, monto, motivo) VALUES
-(8, 3,50000,'Cuentas');
-INSERT INTO Ayudas (ayudaid, beneficiarioid, monto, motivo) VALUES
-(9, 3,50000,'Alimentación');
-INSERT INTO Ayudas (ayudaid, beneficiarioid, monto, motivo) VALUES
-(10, 1,25000,'Insumos');
-INSERT INTO Ayudas (ayudaid, beneficiarioid, monto, motivo) VALUES
-(11, 5,25000,'Alimentación');
-INSERT INTO Ayudas (ayudaid, beneficiarioid, monto, motivo) VALUES
-(12, 6,38500,'Cuentas');
-INSERT INTO Ayudas (ayudaid, beneficiarioid, monto, motivo) VALUES
-(13, 5,20000,'Insumos');
-
-ALTER SEQUENCE HIBERNATE_SEQUENCE INCREMENT BY 100;
-SELECT HIBERNATE_SEQUENCE.nextval FROM dual;
-ALTER SEQUENCE HIBERNATE_SEQUENCE INCREMENT BY 1;
+insert into categoria values (1,'Electrónica');
+insert into categoria values (2,'Dormitorio');
+insert into categoria values (3,'Tecno');
+insert into producto values (1,'Ventilador sobremesa',19990,1);
+insert into producto values (2,'Horno eléctrico',25480,1);
+insert into producto values (3,'Tostadora',10990,1);
+insert into producto values (4,'Cama 1 plaza',99990,2);
+insert into producto values (5,'Juego de sábanas',12790,2);
+insert into producto values (6,'Almohada',5470,2);
+insert into producto values (7,'Televisor',150000,3);
+insert into producto values (8,'Consola multiuso',200000,3);
+insert into producto values (9,'Cámara reflex',50000,3);
+insert into factura values (1,'Diego Abarca','04-08-2020');
+insert into factura values (2,'Estefania Berrios','01-08-2020');
+insert into factura values (3,'Francisca Cordero','30-07-2020');
+insert into factura values (4,'Gastón Durán','10-08-2020');
+insert into detallefactura values (1,5,2);
+insert into detallefactura values (1,4,1);
+insert into detallefactura values (1,1,3);
+insert into detallefactura values (2,9,3);
+insert into detallefactura values (2,1,2);
+insert into detallefactura values (3,2,1);
+insert into detallefactura values (3,4,1);
+insert into detallefactura values (3,7,2);
+insert into detallefactura values (3,6,3);
+insert into detallefactura values (4,3,1);

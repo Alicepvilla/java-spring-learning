@@ -11,7 +11,7 @@ import org.springframework.core.env.Environment;
 import javax.sql.DataSource;
 
 // Currently deactivated because H2
-@Configuration
+//@Configuration
 @PropertySource(value = "classpath:properties/oracle.properties")
 public class DataConfigurations {
     @Autowired

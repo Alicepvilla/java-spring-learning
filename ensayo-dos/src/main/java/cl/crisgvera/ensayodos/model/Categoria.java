@@ -1,11 +1,17 @@
 package cl.crisgvera.ensayodos.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Data
+@EqualsAndHashCode(exclude = "productos")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Categoria {
     @Id
     @Column(name = "categoriaid")
@@ -15,5 +21,5 @@ public class Categoria {
     private String name;
 
     @OneToMany(mappedBy = "categoria", fetch = FetchType.LAZY, orphanRemoval = true)
-    private Producto producto;
+    private Set<Producto> productos;
 }
