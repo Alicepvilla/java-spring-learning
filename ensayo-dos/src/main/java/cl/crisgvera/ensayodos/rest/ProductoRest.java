@@ -20,9 +20,14 @@ public class ProductoRest {
         return new ProductoDto(productoService.getAll());
     }
 
-    @GetMapping("/categoria/{categoriaName}")
+    @GetMapping("/categoria/name/{categoriaName}")
     public ProductoDto getAllByCategoriaName(@PathVariable("categoriaName") String categoriaName) {
         categoriaName = StringUtils.capitalize(categoriaName.toLowerCase());
         return new ProductoDto(productoService.getAllByCategoriaName(categoriaName));
+    }
+
+    @GetMapping("/categoria/id/{categoriaId}")
+    public ProductoDto getAllByCategoriaId(@PathVariable("categoriaId") Long categoriaId) {
+        return new ProductoDto(productoService.getAllByCategoriaId(categoriaId));
     }
 }

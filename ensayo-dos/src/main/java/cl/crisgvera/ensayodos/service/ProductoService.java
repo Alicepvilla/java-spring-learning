@@ -37,6 +37,14 @@ public class ProductoService implements DAO<Producto, Long> {
                         Collections::unmodifiableList));
     }
 
+    public Collection<Producto> getAllByCategoriaId(Long categoriaId) {
+        return productoRepository.findAllByCategoria_Id(categoriaId)
+                .stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.collectingAndThen(Collectors.toList(),
+                        Collections::unmodifiableList));
+    }
+
     @Override
     public Producto save(Producto producto) {
         return null;

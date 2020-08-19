@@ -9,4 +9,5 @@ import java.util.Collection;
 @Repository
 public interface ProductoRepository extends JpaRepository<Producto, Long> {
     Collection<Producto> findAllByCategoria_Name(String categoriaName);
+    Collection<Producto> findAllByCategoria_Id(Long categoriaId);
 }
