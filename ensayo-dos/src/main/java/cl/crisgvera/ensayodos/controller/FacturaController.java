@@ -7,8 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @Controller
 public class FacturaController {
     @Autowired
@@ -26,6 +24,7 @@ public class FacturaController {
         model.addAttribute("factura", factura);
         if (factura != null)
             model.addAttribute("valoresTotal", facturaService.getTotalValues(factura));
+        else model.addAttribute("facturaIdError", id);
         return "index";
     }
 }

@@ -87,5 +87,9 @@
         </tbody>
     </table>
 </th:block>
+<th:block th:if="${facturaIdError != null}">
+    <h3 th:if="${facturaIdError > 0}" th:text="${'Factura N°' + facturaIdError + ' no encontrada'}"></h3>
+    <h3 th:unless="${facturaIdError > 0}">Debes ingresar un número de factura</h3>
+</th:block>
 </body>
 </html>

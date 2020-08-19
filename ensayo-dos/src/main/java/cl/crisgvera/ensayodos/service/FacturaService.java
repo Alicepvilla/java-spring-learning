@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class FacturaService implements DAO<Factura, Long> {
@@ -18,8 +17,7 @@ public class FacturaService implements DAO<Factura, Long> {
 
     @Override
     public Factura getOne(Long id) {
-        return Optional.ofNullable(facturaRepository.getOne(id))
-                .orElse(null);
+        return facturaRepository.findById(id).orElse(null);
     }
 
     public List<Integer> getTotalValues(Factura factura) {
