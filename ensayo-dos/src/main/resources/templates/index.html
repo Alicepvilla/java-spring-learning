@@ -34,6 +34,12 @@
     <input id="factura-id" name="factura-id" type="number" min="1">
     <button type="submit">Obtener</button>
 </form>
+<h2>Visualizar productos por categoría</h2>
+<form th:action="@{/producto}" th:method="GET">
+    <label for="categoria-id">Categoria ID:</label>
+    <input id="categoria-id" name="categoria-id" type="number" min="1">
+    <button type="submit">Obtener JSON</button>
+</form>
 <hr/>
 <th:block th:if="${factura != null}">
     <h1 th:text="${'Factura N°' + factura.id}"></h1>
