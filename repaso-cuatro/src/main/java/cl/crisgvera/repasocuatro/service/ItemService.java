@@ -4,6 +4,7 @@ import cl.crisgvera.repasocuatro.model.Item;
 import cl.crisgvera.repasocuatro.model.Proveedor;
 import cl.crisgvera.repasocuatro.repository.ItemRepository;
 import cl.crisgvera.repasocuatro.service.util.DAO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
