@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Actualizar Agenda</title>
+</head>
+<body>
+<form th:action="@{/agenda}" th:method="POST" th:object="${agenda}">
+    <label for="nombre-paciente">Nombre Paciente:</label>
+    <input id="nombre-paciente" th:field="*{paciente.datosPersona.nombre}">
+    <span th:if="${#fields.hasErrors('paciente.datosPersona.nombre')}"
+          th:errors="*{paciente.datosPersona.nombre}"></span>
+    <br/>
+    <label for="apellido-paciente">Apellido Paciente:</label>
+    <input id="apellido-paciente" th:field="*{paciente.datosPersona.apellido}">
+    <br/>
+    <label for="rut-paciente">Rut Paciente:</label>
+    <input id="rut-paciente" th:field="*{paciente.rut}">
+    <br/>
+    <label for="especialidad">Especialidad:</label>
+    <select id="especialidad" th:field="*{doctor.especialidad.id}">
+        <th:block th:each="especialidad : ${especialidades}">
+            <option th:value="${especialidad.id}" th:text="${especialidad.description}"></option>
+        </th:block>
+    </select>
+    <br/>
+    <label for="doctor">Doctor(a):</label>
+    <select id="doctor" th:field="*{doctor.id}">
+        <th:block th:each="doctor : ${doctores}">
+            <option th:value="${doctor.id}"
+                    th:text="${doctor.datosPersona.nombre + ' ' + doctor.datosPersona.apellido}"></option>
+        </th:block>
+    </select>
+    <hr/>
+    <label for="fecha">Fecha:</label>
+    <input id="fecha" type="date" th:field="*{date}">
+    <label for="hora">Hora:</label>
+    <input id="hora" type="datetime-local" th:field="*{time}">
+    <a th:href="@{/reserva}" class="ui-button">Limpiar</a>
+    <button type="submit" class="ui-button">Reservar</button>
+</form>
+</body>
+</html>
