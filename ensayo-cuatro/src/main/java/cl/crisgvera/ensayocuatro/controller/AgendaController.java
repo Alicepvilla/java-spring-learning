@@ -43,22 +43,15 @@ public class AgendaController {
 
     @Transactional
     @PostMapping
-    public String crearAgenda(@Valid @ModelAttribute("agenda") Agenda agenda,
-                              BindingResult bindingResult,
+    public String crearAgenda(@ModelAttribute("agenda") Agenda agenda,
                               Model model) {
-        if (bindingResult.hasErrors()) {
-            log.warn("Solicitud de reserva tiene errores");
-            model.addAttribute("especialidades", getEspecialidades());
-            model.addAttribute("doctores", getDoctores());
-            return "index";
-        }
 
         if (agendaService.findByDateAndTime(agenda.getDate(), agenda.getTime()) != null) {
             log.warn("Solicitud de reserva en horario inválido");
             model.addAttribute("errorMsg", "Horario reservado");
 //            model.addAttribute("agenda", agenda);
             model.addAttribute("especialidades", getEspecialidades());
-            model.addAttribute(getDoctores());
+            model.addAttribute("doctores", getDoctores());
             return "index";
         }
 
@@ -69,7 +62,7 @@ public class AgendaController {
             model.addAttribute("errorMsg", "Fecha u hora inválida");
 //            model.addAttribute("agenda", agenda);
             model.addAttribute("especialidades", getEspecialidades());
-            model.addAttribute(getDoctores());
+            model.addAttribute("doctores", getDoctores());
         }
 
         Paciente paciente = agenda.getPaciente();
@@ -96,6 +89,8 @@ public class AgendaController {
         try {
             Long agendaId = Long.valueOf(id);
             model.addAttribute("agenda", agendaService.findById(agendaId));
+            model.addAttribute("especialidades", getEspecialidades());
+            model.addAttribute("doctores", getDoctores());
             log.info("Reserva " + id + " encontrada");
         } catch (Exception e) {
             log.warn("Agenda ID: " + id + ", no es de tipo Long - Actualizar agenda");

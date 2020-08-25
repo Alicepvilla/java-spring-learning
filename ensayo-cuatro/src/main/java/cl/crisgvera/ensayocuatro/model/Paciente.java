@@ -24,7 +24,6 @@ public class Paciente {
     private Long id;
 
     @Column(name = "rutpaciente", length = 11, unique = true)
-    @NotBlank(message = "Campo obligatorio")
     private String rut;
 
     @Embedded

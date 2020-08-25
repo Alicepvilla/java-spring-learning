@@ -15,7 +15,6 @@ import javax.validation.constraints.NotBlank;
 public class DatosPersona {
 
     @Column(length = 50)
-    @NotBlank(message = "Campo obligatorio")
     private String nombre, apellido;
 
 }

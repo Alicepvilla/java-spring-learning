@@ -3,20 +3,24 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <title>Actualizar Agenda</title>
 </head>
 <body>
+<h1>Actualizar reserva</h1>
 <form th:action="@{/agenda}" th:method="POST" th:object="${agenda}">
     <label for="nombre-paciente">Nombre Paciente:</label>
-    <input id="nombre-paciente" th:field="*{paciente.datosPersona.nombre}">
+    <input id="nombre-paciente" th:field="*{paciente.datosPersona.nombre}" disabled>
     <span th:if="${#fields.hasErrors('paciente.datosPersona.nombre')}"
           th:errors="*{paciente.datosPersona.nombre}"></span>
     <br/>
     <label for="apellido-paciente">Apellido Paciente:</label>
-    <input id="apellido-paciente" th:field="*{paciente.datosPersona.apellido}">
+    <input id="apellido-paciente" th:field="*{paciente.datosPersona.apellido}" disabled>
     <br/>
     <label for="rut-paciente">Rut Paciente:</label>
-    <input id="rut-paciente" th:field="*{paciente.rut}">
+    <input id="rut-paciente" th:field="*{paciente.rut}" disabled>
     <br/>
     <label for="especialidad">Especialidad:</label>
     <select id="especialidad" th:field="*{doctor.especialidad.id}">
@@ -37,8 +41,8 @@
     <input id="fecha" type="date" th:field="*{date}">
     <label for="hora">Hora:</label>
     <input id="hora" type="datetime-local" th:field="*{time}">
-    <a th:href="@{/reserva}" class="ui-button">Limpiar</a>
-    <button type="submit" class="ui-button">Reservar</button>
+    <a th:href="@{/}" class="ui-button">Volver</a>
+    <button type="submit" class="ui-button">Editar</button>
 </form>
 </body>
 </html>
