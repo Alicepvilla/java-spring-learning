@@ -5,7 +5,6 @@ import cl.crisgvera.ensayocinco.repository.CommentRepository;
 import cl.crisgvera.ensayocinco.service.util.CrudMethods;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -45,9 +44,7 @@ public class CommentService implements CrudMethods<Comment, Long> {
     }
 
     public List<Comment> saveAll(List<Comment> comments) {
-        comments.forEach(comment -> {
-            comment.setPostId(postService.findById(comment.getPostId().getId()));
-        });
+        comments.forEach(comment -> comment.setPostId(postService.findById(comment.getPostId().getId())));
         return commentRepository.saveAll(comments);
     }
 

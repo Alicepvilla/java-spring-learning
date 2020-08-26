@@ -5,7 +5,6 @@ import cl.crisgvera.ensayocinco.repository.PostRepository;
 import cl.crisgvera.ensayocinco.service.util.CrudMethods;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -42,9 +41,7 @@ public class PostService implements CrudMethods<Post, Long> {
     }
 
     public List<Post> saveAll(List<Post> posts) {
-        posts.forEach(post -> {
-            post.setUserId(userService.findById(post.getUserId().getId()));
-        });
+        posts.forEach(post -> post.setUserId(userService.findById(post.getUserId().getId())));
         return postRepository.saveAll(posts);
     }
 

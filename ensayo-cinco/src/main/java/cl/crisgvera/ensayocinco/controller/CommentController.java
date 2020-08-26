@@ -1,9 +1,7 @@
 package cl.crisgvera.ensayocinco.controller;
 
 import cl.crisgvera.ensayocinco.model.Comment;
-import cl.crisgvera.ensayocinco.model.resource.CommentCollection;
 import cl.crisgvera.ensayocinco.service.CommentService;
-import cl.crisgvera.ensayocinco.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Controller;
@@ -32,11 +30,12 @@ public class CommentController {
                 .get()
                 .uri("https://jsonplaceholder.typicode.com/comments")
                 .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<List<Comment>>() {})
+                .bodyToMono(new ParameterizedTypeReference<List<Comment>>() {
+                })
                 .block();
 
         commentService.deleteAll();
-        comments = commentService.saveAll(comments);
+        commentService.saveAll(comments);
 
         model.addAttribute("successfulMsg", "Datos correctamente cargados");
         return "forward:/";
@@ -50,9 +49,8 @@ public class CommentController {
             model.addAttribute("postId", id);
         } catch (Exception e) {
             model.addAttribute("errorMsg", "Invalid Post ID");
-        } finally {
-            return "index";
         }
+        return "index";
     }
 
     @GetMapping("/post")

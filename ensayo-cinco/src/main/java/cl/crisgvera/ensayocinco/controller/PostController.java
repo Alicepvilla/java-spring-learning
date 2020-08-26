@@ -28,11 +28,12 @@ public class PostController {
                 .get()
                 .uri("https://jsonplaceholder.typicode.com/posts")
                 .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<List<Post>>() {})
+                .bodyToMono(new ParameterizedTypeReference<List<Post>>() {
+                })
                 .block();
 
         postService.deleteAll();
-        posts = postService.saveAll(posts);
+        postService.saveAll(posts);
 
         return "redirect:/comment/setup";
     }
