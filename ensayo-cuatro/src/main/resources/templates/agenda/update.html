@@ -13,8 +13,6 @@
 <form th:action="@{/agenda}" th:method="POST" th:object="${agenda}">
     <label for="nombre-paciente">Nombre Paciente:</label>
     <input id="nombre-paciente" th:field="*{paciente.datosPersona.nombre}" disabled>
-    <span th:if="${#fields.hasErrors('paciente.datosPersona.nombre')}"
-          th:errors="*{paciente.datosPersona.nombre}"></span>
     <br/>
     <label for="apellido-paciente">Apellido Paciente:</label>
     <input id="apellido-paciente" th:field="*{paciente.datosPersona.apellido}" disabled>

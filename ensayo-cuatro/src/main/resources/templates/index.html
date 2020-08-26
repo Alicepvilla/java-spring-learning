@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+
     <script type="text/javascript" charset="utf8"
             src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
     <script type="text/javascript">
@@ -26,6 +30,28 @@
                     console.log(myJson);
                     console.log(myJsonKey);
                 }
+            });
+        });
+    </script>
+    <script>
+        $(function () {
+            $(".dialog-confirm").dialog({
+                resizable: false,
+                height: "auto",
+                width: 400,
+                modal: true,
+                autoOpen: false,
+                show: {
+                    effect: "blind",
+                    duration: 200
+                },
+                hide: {
+                    effect: "blind",
+                    duration: 200
+                }
+            });
+            $(".borrar-registro").on("click", function () {
+                $(".dialog-confirm").dialog("open");
             });
         });
     </script>
@@ -68,7 +94,8 @@
         <label for="doctor">Doctor(a):</label>
         <select id="doctor" th:field="*{doctor.id}" required>
             <th:block th:each="doctor : ${doctores}">
-                <option th:value="${doctor.id}" th:text="${doctor.datosPersona.nombre + ' ' + doctor.datosPersona.apellido}"></option>
+                <option th:value="${doctor.id}"
+                        th:text="${doctor.datosPersona.nombre + ' ' + doctor.datosPersona.apellido}"></option>
             </th:block>
         </select>
         <hr/>
@@ -111,7 +138,12 @@
                     </form>
                     <form th:action="@{/agenda/eliminar}" th:method="POST">
                         <input type="hidden" name="id" th:value="${a.id}">
-                        <button type="submit" class="ui-button">Borrar</button>
+                        <div class="dialog-confirm" title="¿Eliminar registro?">
+                            <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>¿Estás
+                                seguro(a) que deseas borrar el registro? Esta acción no se puede deshacer</p>
+                            <button type="submit" class="ui-button">Borrar</button>
+                        </div>
+                        <button type="button" class="ui-button borrar-registro">Borrar</button>
                     </form>
                 </td>
             </tr>

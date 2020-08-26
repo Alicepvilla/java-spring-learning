@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.table-info').DataTable();
+            $(function () {
+                $(".widget input[type=submit], .widget a, .widget button").button();
+                $("button, input, a").click(function (event) {
+                    event.preventDefault();
+                });
+            });
+        });
+    </script>
+    <style>
+        main {
+            display: flex;
+            flex-flow: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .table-info {
+            width: 50%;
+            text-align: left;
+        }
+    </style>
+    <title>User</title>
+</head>
+<body>
+<main>
+    <h1>Menú principal</h1>
+    <a th:href="@{/setup}" class="ui-button">Cargar datos en la base de datos</a>
+    <p style="color: green" th:if="${successfulMsg != null}" th:text="${successfulMsg}"></p>
+    <hr/>
+    <a th:href="@{/post}" class="ui-button">Listar de publicaciones</a>
+    <br/>
+    <form th:action="@{/comment/post}" th:method="GET">
+        <label for="post-id">Post ID:</label>
+        <input id="post-id" name="post-id" type="number" min="1" required>
+        <button type="submit" class="ui-button">Obtener comentarios</button>
+    </form>
+    <hr/>
+    <th:block th:if="${posts != null}">
+        <h2>Listado de publicaciones</h2>
+        <table class="display table-info">
+            <thead>
+            <tr>
+                <th>Título</th>
+                <th>Usuario</th>
+                <th>Cantidad de comentarios</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="post : ${posts}">
+                <tr>
+                    <td th:text="${post.title}"></td>
+                    <td th:text="${post.userId.username}"></td>
+                    <td th:text="${post.comments.stream().count()}"></td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+        <th:block th:if="${posts.size() == 0}">
+            <h3 style="color: red">
+                ¡Recuerda cargar los datos en la base de datos primero!
+            </h3>
+            <a th:href="@{/setup}" class="ui-button" style="background-color: green">
+                Cargar
+            </a>
+        </th:block>
+    </th:block>
+
+    <th:block th:if="${postComments != null}">
+        <h2 th:text="${'Comentarios publicación ID ' + id}"></h2>
+        <table class="display table-info">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Título de publicación</th>
+                <th>Email</th>
+                <th>Comentario</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="postComment : ${postComments}">
+                <tr>
+                    <td th:text="${postComment.id}"></td>
+                    <td th:text="${postComment.postId.title}"></td>
+                    <td th:text="${postComment.postId.userId.email}"></td>
+                    <td th:if="${postComment.body.length() <= 20}"
+                        th:text="${postComment.body}"></td>
+                    <td th:unless="${postComment.body.length() <= 20}"
+                        th:text="${postComment.body.substring(0, 20) + '...'}"></td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+        <h3 style="color: orange" th:if="${postComments.size() == 0}">
+            No existen registros asociados a este ID
+        </h3>
+    </th:block>
+</main>
+</body>
+</html>
