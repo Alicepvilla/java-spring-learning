@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="headerfiles">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#agendas-info').DataTable();
+            $(function () {
+                $(".widget input[type=submit], .widget a, .widget button").button();
+                $("button, input, a").click(function (event) {
+                    event.preventDefault();
+                });
+            });
+        });
+    </script>
+    <style>
+        .forms-cell {
+            display: flex;
+            justify-content: space-evenly;
+        }
+    </style>
+</head>
+<body>
+<!--  Formulario de registro para nuevas horas  -->
+<div th:fragment="agenda-form">
+    <h1>Reserva de horas médicas</h1>
+    <a th:href="@{/listado}">Listar reservas</a>
+    <hr/>
+    <div th:replace="fragments/general.html :: msg"></div>
+    <form th:action="@{/agenda}" th:method="POST" th:object="${agenda}">
+        <input type="hidden" th:field="*{id}">
+        <label for="nombre-paciente">Nombre Paciente:</label>
+        <input id="nombre-paciente" th:field="*{paciente.datosPersona.nombre}"
+               th:disabled="*{id != null}" required>
+        <br/>
+        <label for="apellido-paciente">Apellido Paciente:</label>
+        <input id="apellido-paciente" th:field="*{paciente.datosPersona.apellido}"
+               th:disabled="*{id != null}" required>
+        <br/>
+        <label for="rut-paciente">Rut Paciente:</label>
+        <input id="rut-paciente" th:field="*{paciente.rut}"
+               th:disabled="*{id != null}" required>
+        <br/>
+        <label for="especialidad">Especialidad:</label>
+        <select id="especialidad" th:field="*{doctor.especialidad.id}" onchange="selectDoctors(this.value)">
+            <th:block th:each="especialidad : ${especialidades}">
+                <option class="especialidad-doctores" th:value="${especialidad.id}"
+                        th:text="${especialidad.description}"></option>
+            </th:block>
+        </select>
+        <br/>
+        <label for="doctor">Doctor(a):</label>
+        <select id="doctor" th:field="*{doctor.id}">
+            <th:block th:each="doctor : ${doctores}">
+                <option class="especialidad-doctores" th:value="${doctor.id}"
+                        th:data-option="${doctor.especialidad.id}"
+                        th:text="${doctor.datosPersona.nombre + ' ' + doctor.datosPersona.apellido}"></option>
+            </th:block>
+        </select>
+        <hr/>
+        <label for="fecha">Fecha:</label>
+        <input id="fecha" type="date" th:field="*{date}" required>
+        <label for="hora">Hora:</label>
+        <input id="hora" type="time" th:field="*{time}" step="900" required>
+        <th:block th:if="*{id == null}">
+            <a th:href="@{/reserva}" class="ui-button">Limpiar</a>
+            <button type="submit" class="ui-button">Reservar</button>
+        </th:block>
+        <th:block th:if="*{id != null}">
+            <a th:href="@{/listado}" class="ui-button">Cancelar</a>
+            <button type="submit" class="ui-button">Actualizar</button>
+        </th:block>
+    </form>
+</div>
+
+<script th:fragment="agenda-form" type="text/javascript">
+    const especialidad = document.querySelector('#especialidad');
+    const doctor = document.querySelector('#doctor');
+    const doctores = doctor.querySelectorAll('.especialidad-doctores');
+
+    function selectDoctors(selValue) {
+        doctor.innerHTML = '';
+        for (let i = 0; i < doctores.length; i++) {
+            if (doctores[i].dataset.option === selValue) {
+                doctor.appendChild(doctores[i]);
+            }
+        }
+    }
+
+    selectDoctors(especialidad.value);
+</script>
+<!--  Tabla con lista de horarios agendados  -->
+<div th:fragment="agendas-info">
+    <h1>Listado de reservas</h1>
+    <a th:href="@{/reserva}">Reservar hora</a>
+    <hr/>
+    <div th:replace="fragments/general.html :: msg"></div>
+    <table id="agendas-info" class="display">
+        <thead>
+        <tr>
+            <th>Paciente</th>
+            <th>RUT Paciente</th>
+            <th>Doctor(a)</th>
+            <th>Especialidad</th>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="a : ${agendas}">
+            <tr>
+                <td th:text="${a.paciente.datosPersona.nombre + ' ' +
+                                a.paciente.datosPersona.apellido}"></td>
+                <td th:text="${a.paciente.rut}"></td>
+                <td th:text="${a.doctor.datosPersona.nombre + ' ' +
+                                a.doctor.datosPersona.apellido}"></td>
+                <td th:text="${a.doctor.especialidad.description}"></td>
+                <td th:text="${a.date}"></td>
+                <td th:text="${a.time}"></td>
+                <td class="forms-cell">
+                    <form th:action="@{/agenda}" th:method="GET">
+                        <input type="hidden" name="id" th:value="${a.id}">
+                        <button type="submit" class="ui-button">Editar</button>
+                    </form>
+                    <button th:id="${'borrar-btn-' + a.id}" th:name="${a.id}" type="button" class="ui-button borrar-btn">Borrar</button>
+                    <form hidden th:id="${'borrar-cell-' + a.id}" class="borrar-cell" th:action="@{/agenda/eliminar}"
+                          th:method="POST">
+                        <input type="hidden" name="id" th:value="${a.id}">
+                        <label>¿Eliminar registro?</label>
+                        <button th:name="${a.id}" class="cancelar-btn" type="button">Cancelar</button>
+                        <button id="borrar" type="submit">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
+</div>
+
+<script th:fragment="agendas-info" type="text/javascript">
+    $('.borrar-btn').click(function () {
+        $("#borrar-cell-" + this.name).show();
+        $(this).hide();
+    });
+
+    $('.cancelar-btn').click(function () {
+        $("#borrar-cell-" + this.name).hide();
+        $("#borrar-btn-" + this.name).show();
+    });
+</script>
+
+<div th:fragment="msg">
+    <th:block th:if="${errorMsg != null}">
+        <h3 style="color: red" th:text="${errorMsg}"></h3>
+    </th:block>
+    <th:block th:if="${successfulMsg != null}">
+        <h3 style="color: green" th:text="${successfulMsg}"></h3>
+    </th:block>
+</div>
+</body>
+</html>

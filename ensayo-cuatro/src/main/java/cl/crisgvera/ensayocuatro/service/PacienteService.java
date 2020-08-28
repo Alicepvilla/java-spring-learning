@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class PacienteService implements CrudMethods<Paciente, Long> {
@@ -26,7 +29,10 @@ public class PacienteService implements CrudMethods<Paciente, Long> {
 
     @Override
     public Collection<Paciente> findAll() {
-        return null;
+        return pacienteRepository.findAll().stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.collectingAndThen(Collectors.toList(),
+                        Collections::unmodifiableList));
     }
 
     @Override
@@ -42,5 +48,15 @@ public class PacienteService implements CrudMethods<Paciente, Long> {
     @Override
     public void delete(Paciente paciente) {
 
+    }
+
+    public Long getLastPacienteId() {
+        Paciente lastPaciente = findAll().stream()
+                .reduce((p1, p2) -> {
+                    if (p1.getId() > p2.getId()) return p1;
+                    else return p2;
+                }).orElse(null);
+        if (lastPaciente != null) return lastPaciente.getId();
+        else return 0L;
     }
 }

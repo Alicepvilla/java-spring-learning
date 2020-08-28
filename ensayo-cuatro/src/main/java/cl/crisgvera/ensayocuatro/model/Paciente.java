@@ -42,4 +42,8 @@ public class Paciente {
         agenda.setPaciente(null);
     }
 
+    public String getFullName() {
+        return datosPersona.getNombre() + " " + datosPersona.getApellido();
+    }
+
 }

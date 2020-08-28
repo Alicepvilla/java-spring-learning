@@ -6,7 +6,6 @@ import cl.crisgvera.ensayocuatro.model.Especialidad;
 import cl.crisgvera.ensayocuatro.rest.util.DoctorCollection;
 import cl.crisgvera.ensayocuatro.rest.util.EspecialidadCollection;
 import cl.crisgvera.ensayocuatro.service.AgendaService;
-import cl.crisgvera.ensayocuatro.service.PacienteService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,9 +23,6 @@ public class MainController {
     private WebClient.Builder webClientBuilder;
 
     @Autowired
-    private PacienteService pacienteService;
-
-    @Autowired
     private AgendaService agendaService;
 
     @GetMapping("")
@@ -37,10 +33,10 @@ public class MainController {
 
     @GetMapping("/reserva")
     public String reservarAgenda(Model model) {
-        model.addAttribute("agenda", new Agenda());
+        Agenda agenda = new Agenda();
+        model.addAttribute("agenda", agenda);
         log.info("Nueva agenda creada");
-        model.addAttribute("doctores", getDoctores());
-        model.addAttribute("especialidades", getEspecialidades());
+        model = setDoctoresAndEspecialidades(model);
         log.info("Doctores obtenidos mediante REST call");
         return "index";
     }
@@ -52,7 +48,7 @@ public class MainController {
         return "index";
     }
 
-    public Collection<Especialidad> getEspecialidades() {
+    private Collection<Especialidad> getEspecialidades() {
         return webClientBuilder.build()
                 .get()
                 .uri("http://localhost:8081/rest/especialidad/get-all")
@@ -62,7 +58,7 @@ public class MainController {
                 .getEspecialidades();
     }
 
-    public Collection<Doctor> getDoctores() {
+    private Collection<Doctor> getDoctores() {
         return webClientBuilder.build()
                 .get()
                 .uri("http://localhost:8081/rest/doctor/get-all")
@@ -70,6 +66,12 @@ public class MainController {
                 .bodyToMono(DoctorCollection.class)
                 .block()
                 .getDoctores();
+    }
+
+    private Model setDoctoresAndEspecialidades(Model model) {
+        model.addAttribute("especialidades", getEspecialidades());
+        model.addAttribute("doctores", getDoctores());
+        return model;
     }
 
 }

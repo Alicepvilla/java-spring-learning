@@ -3,22 +3,15 @@ package cl.crisgvera.ensayocuatro.controller;
 import cl.crisgvera.ensayocuatro.model.Agenda;
 import cl.crisgvera.ensayocuatro.model.Doctor;
 import cl.crisgvera.ensayocuatro.model.Especialidad;
-import cl.crisgvera.ensayocuatro.model.Paciente;
 import cl.crisgvera.ensayocuatro.rest.util.DoctorCollection;
 import cl.crisgvera.ensayocuatro.rest.util.EspecialidadCollection;
 import cl.crisgvera.ensayocuatro.service.AgendaService;
-import cl.crisgvera.ensayocuatro.service.DoctorService;
-import cl.crisgvera.ensayocuatro.service.PacienteService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
-
-import javax.validation.Valid;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -33,53 +26,45 @@ public class AgendaController {
     private AgendaService agendaService;
 
     @Autowired
-    private PacienteService pacienteService;
-
-    @Autowired
-    private DoctorService doctorService;
-
-    @Autowired
     private WebClient.Builder webClientBuilder;
 
-    @Transactional
     @PostMapping
     public String crearAgenda(@ModelAttribute("agenda") Agenda agenda,
                               Model model) {
+        model = setDoctoresAndEspecialidades(model);
+        boolean areCreatingAgenda = agenda.getId() == null;
 
-        if (agendaService.findByDateAndTime(agenda.getDate(), agenda.getTime()) != null) {
-            log.warn("Solicitud de reserva en horario inválido");
-            model.addAttribute("errorMsg", "Horario reservado");
-//            model.addAttribute("agenda", agenda);
-            model.addAttribute("especialidades", getEspecialidades());
-            model.addAttribute("doctores", getDoctores());
+        if (areCreatingAgenda) {
+            if (agendaService.findByDateAndTime(agenda.getDate(), agenda.getTime()) != null) {
+                log.warn("Solicitud de reserva en horario inválido");
+                model.addAttribute("errorMsg", "Horario reservado");
+                return "index";
+            }
+        }
+
+        if (agenda.getDate() != null) {
+            if (agenda.getDate().isBefore(LocalDate.now()) ||
+                    (agenda.getDate().isEqual(LocalDate.now()) &&
+                            agenda.getTime().isBefore(LocalTime.now()))) {
+                log.warn("Solicitud de reserva en horario inválido");
+                model.addAttribute("errorMsg", "Fecha u hora inválida");
+                return "index";
+            }
+        } else {
+            model.addAttribute("errorMsg", "Debes ingresar una fecha");
             return "index";
         }
 
-        if (agenda.getDate().isBefore(LocalDate.now()) ||
-                (agenda.getDate().isEqual(LocalDate.now()) &&
-                        agenda.getTime().isBefore(LocalTime.now()))) {
-            log.warn("Solicitud de reserva en horario inválido");
-            model.addAttribute("errorMsg", "Fecha u hora inválida");
-//            model.addAttribute("agenda", agenda);
-            model.addAttribute("especialidades", getEspecialidades());
-            model.addAttribute("doctores", getDoctores());
+        agenda = agendaService.createOrUpdate(agenda);
+
+        if (areCreatingAgenda) {
+            model.addAttribute("successfulMsg", "Reserva creada a nombre de " + agenda.getPaciente().getFullName());
+            model.addAttribute("agenda", new Agenda());
+        } else {
+            model.addAttribute("successfulMsg", "Reserva actualizada");
+            model.addAttribute("agendas", agendaService.findAll());
         }
 
-        Paciente paciente = agenda.getPaciente();
-        Doctor doctor = agenda.getDoctor();
-
-        Paciente pacienteBD = pacienteService.findByRut(paciente.getRut());
-        doctor = doctorService.findById(doctor.getId());
-
-        if (pacienteBD != null)
-            paciente = pacienteBD;
-
-        agenda.setDoctor(doctor);
-        agenda.setPaciente(paciente);
-        agendaService.save(agenda);
-
-        log.info("Solicitud de reserva sin errores");
-        model.addAttribute("successfulMsg", "Reserva creada a nombre de ");
         return "index";
     }
 
@@ -88,14 +73,19 @@ public class AgendaController {
                                    Model model) {
         try {
             Long agendaId = Long.valueOf(id);
-            model.addAttribute("agenda", agendaService.findById(agendaId));
-            model.addAttribute("especialidades", getEspecialidades());
-            model.addAttribute("doctores", getDoctores());
+            Agenda agenda = agendaService.findById(agendaId);
+            if (agenda != null) model.addAttribute("agenda", agenda);
+            else {
+                model.addAttribute("errorMsg", "Agenda ID " + id + " no existe");
+                model.addAttribute("agenda", new Agenda());
+            }
+            model = setDoctoresAndEspecialidades(model);
             log.info("Reserva " + id + " encontrada");
         } catch (Exception e) {
             log.warn("Agenda ID: " + id + ", no es de tipo Long - Actualizar agenda");
+            model.addAttribute("agenda", new Agenda());
+            model = setDoctoresAndEspecialidades(model);
             model.addAttribute("errorMsg", "Agenda ID inválido");
-            return "index";
         }
         return "agenda/update";
     }
@@ -112,10 +102,10 @@ public class AgendaController {
             model.addAttribute("errorMsg", "Agenda ID inválido");
             return "index";
         }
-        return "redirect:/";
+        return "redirect:/listado";
     }
 
-    public Collection<Especialidad> getEspecialidades() {
+    private Collection<Especialidad> getEspecialidades() {
         return webClientBuilder.build()
                 .get()
                 .uri("http://localhost:8081/rest/especialidad/get-all")
@@ -125,7 +115,7 @@ public class AgendaController {
                 .getEspecialidades();
     }
 
-    public Collection<Doctor> getDoctores() {
+    private Collection<Doctor> getDoctores() {
         return webClientBuilder.build()
                 .get()
                 .uri("http://localhost:8081/rest/doctor/get-all")
@@ -133,6 +123,12 @@ public class AgendaController {
                 .bodyToMono(DoctorCollection.class)
                 .block()
                 .getDoctores();
+    }
+
+    private Model setDoctoresAndEspecialidades(Model model) {
+        model.addAttribute("especialidades", getEspecialidades());
+        model.addAttribute("doctores", getDoctores());
+        return model;
     }
 
 }
