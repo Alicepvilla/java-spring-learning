@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <th:block th:insert="fragments/general.html :: headerfiles"></th:block>
+    <style>
+        .oferta {
+            border: 1px solid black;
+            margin: 2%;
+        }
+
+        .oferta-header-first, .oferta-header-second {
+            display: flex;
+            justify-content: space-evenly;
+        }
+
+        .oferta-main {
+            margin: 0 15%;
+        }
+    </style>
+    <title>Postulantes</title>
+</head>
+<body>
+<div th:insert="fragments/general.html :: header"></div>
+<th:block th:each="oferta : ${postulantesOfertas}">
+    <div class="oferta">
+        <div class="oferta-header">
+            <div class="oferta-header-first">
+                <h3 th:text="${oferta.titulo}"></h3>
+                <h4 th:text="${oferta.reclutador.nombreFantasia}"></h4>
+            </div>
+            <div class="oferta-header-second">
+                <h4 th:text="${'Postulaciones: ' + oferta.postulaciones.stream().count()}"></h4>
+                <h4 th:text="${'Publicada el ' + oferta.fecha}"></h4>
+                <h4 th:text="${'Remuneración ofrecida: $' + oferta.salario}"></h4>
+            </div>
+        </div>
+        <div class="oferta-main">
+            <th:block th:each="postulacion : ${oferta.postulaciones}">
+                <ol>
+                    <strong th:text="${postulacionStat.count + '. ' + postulacion.postulante.getFullName() + ': '}"></strong>
+                    <p th:text="${postulacion.postulante.resumen}"></p>
+                </ol>
+            </th:block>
+        </div>
+    </div>
+</th:block>
+</body>
+</html>

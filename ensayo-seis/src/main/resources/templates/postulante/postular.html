@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <th:block th:insert="fragments/general.html :: headerfiles"></th:block>
+    <script>
+        $(document).ready(function () {
+            $('.postular-cell').hide();
+        });
+    </script>
+    <style>
+        .oferta {
+            border: 1px solid black;
+            margin: 2%;
+        }
+
+        .oferta-header-cta {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .oferta-header-info {
+            display: flex;
+            justify-content: space-evenly;
+        }
+
+        .postular-cell {
+            display: flex;
+            flex-flow: column;
+        }
+
+        .oferta-main {
+            margin: 15%;
+        }
+    </style>
+    <title>Postulaciones</title>
+</head>
+<body>
+<div th:insert="fragments/general.html :: header"></div>
+<th:block th:each="oferta : ${ofertas}">
+    <div class="oferta">
+        <div class="oferta-header">
+            <div class="oferta-header-cta">
+                <h3 th:text="${oferta.titulo}"></h3>
+                <button th:id="${'postular-btn-' + oferta.id}" th:name="${oferta.id}" type="button"
+                        class="ui-button postular-btn">Postular
+                </button>
+                <form hidden th:id="${'postular-cell-' + oferta.id}" class="postular-cell"
+                      th:action="@{/oferta/postular}" th:method="POST">
+                    <input type="hidden" th:value="${oferta.id}" name="oferta-id">
+                    <label for="postulante">Selecciona el postulante:</label>
+                    <select id="postulante" name="postulante-id">
+                        <th:block th:each="p : ${postulantes}">
+                            <option th:value="${p.id}" th:text="${p.getFullName()}"></option>
+                        </th:block>
+                    </select>
+                    <button th:name="${oferta.id}" class="cancelar-btn" type="button">Cancelar</button>
+                    <button type="submit">Postular</button>
+                </form>
+            </div>
+            <div class="oferta-header-info">
+                <h4 th:text="${oferta.reclutador.nombreFantasia}"></h4>
+                <h4 th:text="${'Publicada el ' + oferta.fecha}"></h4>
+                <h4 th:text="${'Remuneración ofrecida: $' + oferta.salario}"></h4>
+            </div>
+        </div>
+        <div class="oferta-main">
+            <p th:text="${oferta.descripcion}"></p>
+        </div>
+    </div>
+</th:block>
+<script th:fragment="agendas-info" type="text/javascript">
+    $('.postular-btn').click(function () {
+        $("#postular-cell-" + this.name).show();
+        $(this).hide();
+    });
+
+    $('.cancelar-btn').click(function () {
+        $("#postular-cell-" + this.name).hide();
+        $("#postular-btn-" + this.name).show();
+    });
+</script>
+</body>
+</html>

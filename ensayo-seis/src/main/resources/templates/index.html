@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <th:block th:insert="fragments/general.html :: headerfiles"></th:block>
+    <style>
+        .buttons {
+            display: flex;
+        }
+    </style>
+    <title>Ofertas laborales</title>
+</head>
+<body>
+<h1>Con luquitas baila el mono</h1>
+<div class="buttons">
+    <a th:href="@{/postulante}" class="ui-button">Postulantes</a>
+    <a th:href="@{/reclutador}" class="ui-button">Reclutadores</a>
+</div>
+</body>
+</html>

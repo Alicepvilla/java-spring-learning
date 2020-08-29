@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="headerfiles">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+</head>
+<div th:fragment="header">
+    <h1>Con luquitas baila el mono</h1>
+    <th:block th:if="${postulante != null || ofertas != null}">
+        <h2>Postulantes</h2>
+    </th:block>
+    <th:block th:if="${postulante == null && ofertas == null}">
+        <h2>Reclutadores</h2>
+    </th:block>
+    <p>
+        <a th:href="@{/}">Home</a> |
+        <th:block th:if="${postulante != null || ofertas != null}">
+            <a th:href="@{/postulante/registro}">Registro</a> |
+            <a th:href="@{/postulante/postular}">Postular</a>
+        </th:block>
+        <th:block th:if="${postulante == null && ofertas == null}">
+            <a th:href="@{/reclutador/registro}">Registro</a> |
+            <a th:href="@{/reclutador/ofertar}">Ofertar</a> |
+            <a th:href="@{/reclutador/postulantes}">Postulantes</a>
+        </th:block>
+    </p>
+    <hr/>
+    <th:block th:if="${errorMsg != null}">
+        <h3 style="color: red" th:text="${errorMsg}"></h3>
+    </th:block>
+    <th:block th:if="${successfulMsg != null}">
+        <h3 style="color: green" th:text="${successfulMsg}"></h3>
+    </th:block>
+</div>
+</html>

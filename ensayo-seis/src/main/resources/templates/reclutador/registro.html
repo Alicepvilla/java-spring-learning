@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <th:block th:insert="fragments/general.html :: headerfiles"></th:block>
+    <style>
+        #oferta-form {
+            width: 60%;
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+    <title>Registro</title>
+</head>
+<body>
+<div th:insert="fragments/general.html :: header"></div>
+<form id="reclutador-form" th:action="@{/reclutador/crear}" th:method="POST" th:object="${reclutador}">
+    <label for="nombre-fantasia">Nombre de fantasía:</label>
+    <input id="nombre-fantasia" th:field="*{nombreFantasia}" required>
+    <label for="razon-social">Razón social:</label>
+    <input id="razon-social" th:field="*{razonSocial}" required>
+    <label for="rut">RUT:</label>
+    <input id="rut" th:maxlength="11" th:field="*{rut}" required>
+    <label for="email">Email:</label>
+    <input type="email" id="email" th:field="*{email}" required>
+    <input type="button" onclick="resetForm()" value="Limpiar">
+    <button type="submit">Registrar</button>
+</form>
+<script>
+    function resetForm() {
+        document.getElementById("oferta-form").reset();
+    }
+</script>
+</body>
+</html>
